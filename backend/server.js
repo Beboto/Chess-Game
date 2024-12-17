@@ -9,7 +9,7 @@ const port = 3000;
 
 // Define a route for the root URL ('/') to send a "Hello World!" response
 app.get('/', (req, res) => {
-  res.send('Hello World!'); // Send 'Hello World!' as the response
+  res.send('Get Started!'); // Send 'Get Started!' as the response
 });
 
 // Start the server and listen for requests on the specified port (3000)

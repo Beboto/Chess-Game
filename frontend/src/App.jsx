@@ -12,7 +12,7 @@ import PlayPage from './pages/gamePage/PlayPage'
 
 import { AuthProvider } from './context/AuthContext'; 
 
-
+// App component
 function App() { 
   return (
     <AuthProvider>

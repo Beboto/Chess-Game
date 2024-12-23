@@ -1,35 +1,56 @@
-// Import the Express module using ES Module syntax
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url'; // Required to simulate __dirname in ES Modules
+import http from 'http';
+import { Server } from 'socket.io';
+import cors from 'cors';  // Middleware to enable Cross-Origin Resource Sharing
+import dotenv from 'dotenv';  // Loads environment variables from a .env file
+import cookieParser from 'cookie-parser';  // Parses cookies in HTTP requests
+import passport from 'passport';  // Middleware for authentication
+import connectDB from './database/connect.js';
+import setupGameSocket from './sockets/gameSockets.js';
+import './config/passport.js';
 
-// Simulate __dirname for ES Modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+//routes
+import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
-// console.log(__dirname);
-// console.log(path.join(__dirname, 'index.html'))
-// console.log(path.extname(__filename));
+dotenv.config();
 
-// Create an Express application instance
-const app = express();
+connectDB(); // Database Connection
 
-// Set the port number for the server to listen on
-const port = 3000;
+const app = express();  
 
-app.use(express.static(path.join(__dirname, "public")))
+const corsOptions = {
+    origin: process.env.FRONTEND_URL, // Allow requests only from this frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+    credentials: true,  // Allow cookies to be sent with requests
+};
 
-// Define a route for the root URL ('/') to send a "Hello World!" response
-app.get('/:name', (req, res) => {
-  res.send('Get Started!' + req.params.name); // Send 'Get Started!' as the response
+app.use(cors(corsOptions)); // CORS for HTTP requests
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
+app.use(cookieParser());
+
+const server = http.createServer(app);  // create HTTTP server using express app
+
+const io = new Server(server, {
+    cors: corsOptions
 });
 
-app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html')); // Send the 'index.html' file
- //res.json({"Beboto": 22})
+
+setupGameSocket(io);  
+
+app.get('/', (req, res) => {
+    res.send('Backend API is running....');
 });
 
-// Start the server and listen for requests on the specified port (3000)
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes); 
+// app.use('/api/game', gameRoutes);
+
+
+server.listen(8000, () => {
+    console.log('Server started on port 8000');
 });

@@ -13,7 +13,7 @@ import './config/passport.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
-dotenv.config();
+dotenv.config();  // Load environment variables
 
 connectDB(); // Database Connection
 

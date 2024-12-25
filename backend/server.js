@@ -34,10 +34,11 @@ app.use(cookieParser());
 
 const server = http.createServer(app);  // create HTTTP server using express app
 
-const io = new Server(server, {
-    cors: corsOptions
+// Create a new instance of the Socket.IO server and attach it to the HTTP server.  
+// The 'corsOptions' enables Cross-Origin Resource Sharing (CORS) for WebSocket connections
+const io = new Server(server, {        
+    cors: corsOptions        
 });
-
 
 setupGameSocket(io);  
 

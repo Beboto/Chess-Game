@@ -6,13 +6,13 @@ dotenv.config();
 
 // Register a new user
 export const register = async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, name } = req.body;  // Extract user details from the request
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(401).json({ message: "User already exists" });
     }
-    const user = new User({ email, password, name });
+    const user = new User({ email, password, name });  // Create a new user and save to database
     await user.save();
     res.status(201).json({ message: "User registered" });
   } catch (error) {
@@ -23,7 +23,7 @@ export const register = async (req, res) => {
 
 //login
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body;  // Extract credentials from the request
 
   try {
     const user = await User.findOne({ email });
@@ -33,15 +33,16 @@ export const login = async (req, res) => {
     if (!(await user.comparePassword(password))) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const jwtToken = user.generateAccessToken();
-
+    const jwtToken = user.generateAccessToken();  // Generate JWT token
+    
+    // Set token as a cookie
     res.cookie("jwtToken", jwtToken, {
       httpOnly: true,
       sameSite: "None",
       secure: true,
     });
 
-
+    // Send user data in response
     res.json({
       message: "Login successful",
       user: {
@@ -59,8 +60,8 @@ export const login = async (req, res) => {
 
 // starting point of Google OAuth authentication
 export const googleAuth = passport.authenticate("google", {
-  scope: ["profile", "email"], 
-});
+  scope: ["profile", "email"],  // Request profile and email information
+});   
 
 // callback after Google has authenticated the user
 export const googleAuthCallback = (req, res) => {

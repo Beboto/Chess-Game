@@ -1,6 +1,6 @@
 import express from 'express';
-import { getProfile, getUser  } from '../controllers/profileControllers.js';
-import { verifyToken } from '../Middlewares/authMiddleware.js';
+import { getProfile, getUser  } from '../controllers/profileControllers.js';  // Import controller functions for user profile and data
+import { verifyToken } from '../Middlewares/authMiddleware.js';  // Import middleware for token verification
 
 const router = express.Router();
 

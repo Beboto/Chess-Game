@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import {register, login , googleAuth, googleAuthCallback ,logout } from '../controllers/authControllers.js';
-import { verifyToken } from '../Middlewares/authMiddleware.js';
+import {register, login , googleAuth, googleAuthCallback ,logout } from '../controllers/authControllers.js';  // Import controller functions for authentication
+import { verifyToken } from '../Middlewares/authMiddleware.js'; // Import middleware for token verification
 
-const   router = Router();
+const router = Router();
 
 router.post('/register', register);
 router.post('/sign-in', login);

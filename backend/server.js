@@ -12,6 +12,7 @@ import './config/passport.js';
 //routes
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import gameRoutes from './routes/userRoutes.js';
 
 dotenv.config();  // Load environment variables
 
@@ -49,7 +50,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes); 
-// app.use('/api/game', gameRoutes);
+app.use('/api/game', gameRoutes);
 
 
 server.listen(8000, () => {

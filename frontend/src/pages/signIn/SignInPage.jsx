@@ -86,7 +86,7 @@ function SignInPage() {
           </button>
          
           <Link to="/sign-up" >
-            No accout? <span className="font-bold hover:underline cursor-pointer ">Create an account</span>
+            No account? <span className="font-bold hover:underline cursor-pointer ">Create an account</span>
           </Link>
         </div>
       </div>

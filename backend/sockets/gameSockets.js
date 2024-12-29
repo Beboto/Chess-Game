@@ -10,15 +10,16 @@ export default function setupGameSocket(io) {
         console.log('New client connected');
 
         socket.on('startGame', async (playerId) => {
-            console.log(`Player ${playerId} joined the queue`);
+            console.log(`Player ${playerId} joined the queue`); 
 
+            // Matchmaking logic:
             if (waitingQueue.length === 0) {
                 waitingQueue.push({ playerId, socket });
                 socket.emit('waitingForOpponent', { message: 'Waiting for an opponent...' });
-            } else {
-                // Match with the first player in the queue
-                const opponent = waitingQueue.shift();
-
+            } 
+            else {
+                const opponent = waitingQueue.shift();  // Match with the first player in the queue
+                // Create a new game and save to DB
                 const newGame = new Game({
                     player1: opponent.playerId,
                     player2: playerId,
@@ -32,7 +33,7 @@ export default function setupGameSocket(io) {
                 const savedGame = await newGame.save(); // save to db
                 const gameId = savedGame._id.toString();
 
-                const chess = new Chess(); // new chess instance
+                const chess = new Chess(); // Create Chess game object (new chess instance)
 
                 games[gameId] = { // In-Memory Object
                     chess,
@@ -50,14 +51,16 @@ export default function setupGameSocket(io) {
                     status: 'ongoing',
                 };
 
-                socket.join(gameId);      // cuurent player
+                // Join the game rooms and start the game
+                socket.join(gameId);           // cuurent player
                 opponent.socket.join(gameId);  // opponent
 
-                startTimer(gameId, 'player1', io);
+                startTimer(gameId, 'player1', io);  // Start timer for player1
 
+                // Emit game started event to both players
                 opponent.socket.emit('gameStarted', {
                     gameId,
-                    board: chess.fen(),
+                    board: chess.fen(),             // Current state of the chessboard in FEN string format
                     turn: opponent.playerId,
                     player1:  games[gameId].player1 ,
                     player2:  games[gameId].player2 ,
@@ -91,6 +94,7 @@ export default function setupGameSocket(io) {
                 return;
             }
 
+            // Make the move
             try {
                 chess.move({ from, to });
                 const updatedBoard = chess.fen();
@@ -141,7 +145,7 @@ export default function setupGameSocket(io) {
                 return;
             }
 
-            socket.join(gameId); // rejoin socket to room
+            socket.join(gameId); // Rejoin the game room (socket to room)
 
             socket.emit('recoverdGameState', {
               

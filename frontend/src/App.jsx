@@ -2,9 +2,9 @@ import React  from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
-import SignInPage from './pages/signin/SignInPage'
-import SignUpPage from './pages/signup/SignUpPage'
-import NoPage from './pages/NoPage/NoPage'
+import SignInPage from './pages/signIn/SignInPage'
+import SignUpPage from './pages/signUp/SignUpPage'
+import NoPage from './pages/noPage/NoPage'
 import DashboardPage from './pages/dashboard/DashboardPage'
 import LandingPage from './pages/LandingPage/LandingPage'
 import ProfilePage from './pages/profilePage/ProfilePage'
@@ -12,7 +12,7 @@ import PlayPage from './pages/gamePage/PlayPage'
 
 import { AuthProvider } from './context/AuthContext'; 
 
-// App component
+
 function App() { 
   return (
     <AuthProvider>
